@@ -187,7 +187,8 @@ function checkAuthStatus() {
     const currentUser = localStorage.getItem('currentUser');
     
     // Update navigation based on login status
-    const loginLinks = document.querySelectorAll('a[href="templates/login.html#top"], a[href="templates/login.html"], a[href="../templates/login.html#top"], a[href="../templates/login.html"]');
+    // Find all login links regardless of their href pattern
+    const loginLinks = document.querySelectorAll('a[href*="login.html"]');
     loginLinks.forEach(link => {
         if (link.textContent.trim() === 'Login' && isLoggedIn === 'true') {
             const userName = currentUser ? JSON.parse(currentUser).name.split(' ')[0] : 'Account';
