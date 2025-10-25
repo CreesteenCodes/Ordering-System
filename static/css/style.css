@@ -1100,6 +1100,9 @@ nav {
         height: 200px;
         object-fit: cover;
     }
+    .hero-content {
+        padding-top: 5rem;
+    }
     .hero-content h1 {
         font-size: 2.5rem;
     }
@@ -2151,4 +2154,5 @@ nav {
     .dashboard-section {
         padding: 1rem 3%;
     }
+
 }
