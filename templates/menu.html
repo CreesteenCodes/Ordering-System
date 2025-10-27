@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dimsum by Luna</title>
+    <link rel="icon" type="image/png" href="../static/images/logo.png">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <!--- NavBar -->
+    <nav>
+        <div class="logo">
+            <a href="../index.html#top"><img src="../static/images/logo.png" alt="Dimsum Logo">Dimsum.</a>
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <ion-icon name="menu-outline"></ion-icon>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="../index.html#top">Home</a>
+            <div class="dropdown">
+                <a href="menu.html#menu" class="dropdown-toggle">Menu <ion-icon name="chevron-down-outline"></ion-icon></a>
+                <div class="dropdown-menu">
+                    <a href="menu.html#steamed">Steamed Dishes</a>
+                    <a href="menu.html#fried-baked">Fried & Baked Dishes</a>
+                    <a href="menu.html#noodles-special">Noodles & Special Dishes</a>
+                    <a href="menu.html#dessert">Dessert Dishes</a>
+                </div>
+            </div>
+            <a href="contact.html#contact">Contact Us</a>
+            <div class="icons"><ion-icon name="cart-outline"></ion-icon></div>
+            <a href="login.html#top">Login</a>
+        </div>
+    </nav>
+
+    <!--- Menu -->
+    <section class="menu-section" id="menu">
+        <h3 class="menu-subtitle">OUR MENU</h3>
+        <h2 class="menu-title" id="steamed">Steamed Dishes</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="../static/images/menu-items/steamed-sausage-rolls.jpg" alt="Steamed Sausage Rolls">
+                <h3>Steamed Sausage Rolls</h3>
+                <p class="price">₱115.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/steamed-soup-dumplings.jpg" alt="Steamed Soup Dumplings">
+                <h3>Steamed Soup Dumplings</h3>
+                <p class="price">₱140.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/shrimp-dumplings.jpg" alt="Shrimp Dumplings">
+                <h3>Shrimp Dumplings</h3>
+                <p class="price">₱150.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/pork-sui-mai.jpg" alt="Pork Sui Mai">
+                <h3>Pork Sui Mai</h3>
+                <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/steamed-pork-ribs.jpg" alt="Steamed Pork Ribs">
+                <h3>Steamed Pork Ribs</h3>
+                <p class="price">₱125.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/steamed-chicken-feet.jpg" alt="Steamed Chicken Feet">
+                <h3>Steamed Chicken Feet</h3>
+                <p class="price">₱120.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/sticky-rice-in-lotus-leaf.jpg" alt="Sticky Rice in Lotus Leaf">
+                <h3>Sticky Rice in Lotus Leaf</h3>
+                <p class="price">₱155.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/steamed-pork-buns.jpg" alt="Steamed Pork Buns">
+                <h3>Steamed Pork Buns</h3>
+                <p class="price">₱105.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+
+        <h2 class="menu-title specialty-title" id="fried-baked">Fried & Baked Dishes</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="../static/images/menu-items/baked-pork-buns.jpg" alt="Baked Pork Buns">
+                <h3>Baked Pork Buns</h3>
+                <p class="price">₱102.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/bbq-pork-puffs.jpg" alt="BBQ Pork Puffs">
+                <h3>BBQ Pork Puffs</h3>
+                <p class="price">₱2.60</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/glutinous-rice-dumplings.jpg" alt="Glutinous Rice Dumplings">
+                <h3>Glutinous Rice Dumplings</h3>
+                <p class="price">₱130.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/taro-root-dumplings.jpg" alt="Taro Root Dumplings">
+                <h3>Taro Root Dumplings</h3>
+                <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/pan-fried-turnip-cake.jpg" alt="Pan Fried Turnip Cake">
+                <h3>Pan Fried Turnip Cake</h3>
+                <p class="price">₱115.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/fried-sticky-rice.jpg" alt="Fried Sticky Rice">
+                <h3>Fried Sticky Rice</h3>
+                <p class="price">₱155.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/stuffed-eggplant.jpg" alt="Stuffed Eggplant">
+                <h3>Stuffed Eggplant</h3>
+                <p class="price">₱140.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/spring-rolls.jpg" alt="Spring Rolls">
+                <h3>Spring Rolls</h3>
+                <p class="price">₱105.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+
+        <h2 class="menu-title specialty-title" id="noodles-special">Noodles & Special Dishes</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="../static/images/menu-items/shrimp-noodle-rolls.jpg" alt="Shrimp Noodle Rolls">
+                <h3>Shrimp Noodle Rolls</h3>
+                <p class="price">₱160.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/beef-noodle-rolls.jpg" alt="Beef Noodle Rolls">
+                <h3>Beef Noodle Rolls</h3>
+                <p class="price">₱165.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/chinese-donut-noodle-rolls.jpg" alt="Chinese Donut Noodle Rolls">
+                <h3>Chinese Donut Noodle Rolls</h3>
+                <p class="price">₱150.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/dried-shrimp-scallion-noodle-rolls.jpg" alt="Dried Shrimp Scallion Noodle Rolls">
+                <h3>Dried Shrimp Scallion Noodle Rolls</h3>
+                <p class="price">₱155.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/clams-in-black-bean-sauce.jpg" alt="Clams in Black Bean Sauce">
+                <h3>Clams in Black Bean Sauce</h3>
+                <p class="price">₱175.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/steamed-beef-tripe.jpg" alt="Steamed Beef Tripe">
+                <h3>Steamed Beef Tripe</h3>
+                <p class="price">₱145.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/bbq-pork-noodle-rolls.jpg" alt="BBQ Pork Noodle Rolls">
+                <h3>BBQ Pork Noodle Rolls</h3>
+                <p class="price">₱160.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/garlic-pea-sprouts.jpg" alt="Garlic Pea Sprouts">
+                <h3>Garlic Pea Sprouts</h3>
+                <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+
+        <h2 class="menu-title specialty-title" id="dessert">Dessert Dishes</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="../static/images/menu-items/deep-fried-egg-puffs.jpg" alt="Deep Fried Egg Puffs">
+                <h3>Deep Fried Egg Puffs</h3>
+                <p class="price">₱105.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/deep-fried-twisted-egg-puffs.jpg" alt="Deep Fried Twisted Egg Puffs">
+                <h3>Deep Fried Twisted Egg Puffs</h3>
+                <p class="price">₱85.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/egg-tarts.jpg" alt="Egg Tarts">
+                <h3>Egg Tarts</h3>
+                <p class="price">₱85.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/fried-sesame-balls.jpg" alt="Fried Sesame Balls">
+                <h3>Fried Sesame Balls</h3>
+                <p class="price">₱100.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/steamed-sesame-balls.jpg" alt="Steamed Sesame Balls">
+                <h3>Steamed Sesame Balls</h3>
+                <p class="price">₱120.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/sponge-cake.jpg" alt="Sponge Cake">
+                <h3>Sponge Cake</h3>
+                <p class="price">₱90.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/mango-pudding.jpg" alt="Mango Pudding">
+                <h3>Mango Pudding</h3>
+                <p class="price">₱120.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/sweet-tofu.jpg" alt="Sweet Tofu">
+                <h3>Sweet Tofu</h3>
+                <p class="price">₱115.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand">
+                <h2>Dimsum<span>.</span></h2>
+                <p>We will fill your tummy with delicious food with fast delivery.</p>
+                <div class="footer-socials">
+                    <a href="https://facebook.com/"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="https://instagram.com/"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a href="https://twitter.com/"><ion-icon name="logo-twitter"></ion-icon></a>
+                    <a href="https://google.com/"><ion-icon name="logo-google"></ion-icon></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Our Menu</h3>
+                <ul>
+                    <li><a href="../index.html#special">Special</a></li>
+                    <li><a href="../index.html#popular">Popular</a></li>
+                    <li><a href="menu.html#menu">Category</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="../index.html#services">Why Dimsum</a></li>
+                    <li><a href="footer.html#partner">Partner With Us</a></li>
+                    <li><a href="footer.html#about">About Us</a></li>
+                    <li><a href="footer.html#faq">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="login.html">Account</a></li>
+                    <li><a href="contact.html#contact">Support Center</a></li>
+                    <li><a href="../index.html#reviews">Feedback</a></li>
+                    <li><a href="contact.html#contact">Contacts</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Dimsum. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../static/js/script.js"></script>
+</body>
+</html>

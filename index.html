@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dimsum by Luna</title>
+    <link rel="icon" type="image/png" href="static/images/logo.png">
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body id="top">
+    <!--- NavBar -->
+    <nav>
+        <div class="logo">
+            <a href="index.html#top"><img src="static/images/logo.png" alt="Dimsum Logo">Dimsum.</a>
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <ion-icon name="menu-outline"></ion-icon>
+        </div>        
+        <div class="nav-links" id="navLinks">
+            <a href="index.html#top">Home</a>
+            <div class="dropdown">
+                <a href="templates/menu.html#menu" class="dropdown-toggle">Menu <ion-icon name="chevron-down-outline"></ion-icon></a>
+                <div class="dropdown-menu">
+                    <a href="templates/menu.html#steamed">Steamed Dishes</a>
+                    <a href="templates/menu.html#fried-baked">Fried & Baked Dishes</a>
+                    <a href="templates/menu.html#noodles-special">Noodles & Special Dishes</a>
+                    <a href="templates/menu.html#dessert">Dessert Dishes</a>
+                </div>
+            </div>
+            <a href="templates/contact.html#contact">Contact Us</a>
+            <div class="icons"><ion-icon name="cart-outline"></ion-icon></div>
+            <a href="templates/login.html#top">Login</a>
+        </div>
+    </nav>
+
+    <!--- Homepage -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>When Flavor Meets Tradition</h1>
+            <p>Discover authentic Asian taste, crafted with passion and served fresh with every dish.</p>
+            <button class="order-btn">Order Now</button>
+        </div>
+        <div class="hero-image">
+            <img src="static/images/image-1.png" alt="Dimsum Image">
+        </div>
+    </section>
+
+    <!-- Our Services -->
+    <section class="services" id="services">
+        <div class="services-header">
+            <h4>OUR SERVICES</h4>
+            <h2>How Does It Work?</h2>
+        </div>
+
+        <div class="service-cards">
+            <div class="service-card">
+                <ion-icon name="phone-portrait-outline"></ion-icon>
+                <h3>Easy To Order</h3>
+                <p>You only need a few steps to order your favorite food.</p>
+            </div>
+
+            <div class="service-card">
+                <ion-icon name="bicycle-outline"></ion-icon>
+                <h3>Fast Delivery</h3>
+                <p>Delivery that’s always on time — even faster than you expect!</p>
+            </div>
+
+            <div class="service-card">
+                <ion-icon name="ribbon-outline"></ion-icon>
+                <h3>Best Quality</h3>
+                <p>Not only fast — quality is also our number one priority.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Menu -->
+    <section class="menu-section">
+        <h3 class="menu-subtitle">OUR MENU</h3>
+        <h2 class="menu-title" id="popular">The Most Popular</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="static/images/menu-items/shrimp-dumplings.jpg" alt="Shrimp Dumplings">
+                <h3>Shrimp Dumplings</h3>
+                    <p class="price">₱150.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/pork-sui-mai.jpg" alt="Pork Sui Mai">
+                <h3>Pork Sui Mai</h3>
+                    <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/steamed-pork-buns.jpg" alt="Steamed Pork Buns">
+                <h3>Steamed Pork Buns</h3>
+                    <p class="price">₱105.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/spring-rolls.jpg" alt="Spring Rolls">
+                <h3>Spring Rolls</h3>
+                    <p class="price">₱105.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/baked-pork-buns.jpg" alt="Baked Pork Buns">
+                <h3>Baked Pork Buns</h3>
+                    <p class="price">₱120.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/pan-fried-turnip-cake.jpg" alt="Pan Fried Turnip Cake">
+                <h3>Pan Fried Turnip Cake</h3>
+                    <p class="price">₱115.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/bbq-pork-noodle-rolls.jpg" alt="BBQ Pork Noodle Rolls">
+                <h3>BBQ Pork Noodle Rolls</h3>
+                    <p class="price">₱160.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/egg-tarts.jpg" alt="Egg Tarts">
+                <h3>Egg Tarts</h3>
+                    <p class="price">₱85.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+
+        <h2 class="menu-title specialty-title" id="special">Our Specialties</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="static/images/menu-items/sticky-rice-in-lotus-leaf.jpg" alt="Sticky Rice in Lotus Leaf">
+                <h3>Sticky Rice in Lotus Leaf</h3>
+                    <p class="price">₱155.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/clams-in-black-bean-sauce.jpg" alt="Clams in Black Bean Sauce">
+                <h3>Clams in Black Bean Sauce</h3>
+                    <p class="price">₱175.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/steamed-soup-dumplings.jpg" alt="Steamed Soup Dumplings">
+                <h3>Steamed Soup Dumplings</h3>
+                    <p class="price">₱140.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/fried-sticky-rice.jpg" alt="Fried Sticky Rice">
+                <h3>Fried Sticky Rice</h3>
+                    <p class="price">₱155.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/stuffed-eggplant.jpg" alt="Stuffed Eggplant">
+                <h3>Stuffed Eggplant</h3>
+                    <p class="price">₱140.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/taro-root-dumplings.jpg" alt="Taro Root Dumplings">
+                <h3>Taro Root Dumplings</h3>
+                    <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/mango-pudding.jpg" alt="Mango Pudding">
+                <h3>Mango Pudding</h3>
+                    <p class="price">₱120.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="static/images/menu-items/garlic-pea-sprouts.jpg" alt="Garlic Pea Sprouts">
+                <h3>Garlic Pea Sprouts</h3>
+                    <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <!--- Our Reviews -->
+    <section class="reviews" id="reviews">
+        <div class="review-container">
+            <div class="review-image">
+                <img src="static/images/image-2.png" alt="Customer Review">
+            </div>
+
+            <div class="review-content">
+                <h4>OUR REVIEWS</h4>
+                <h2>What They Say?</h2>
+
+                <div class="review-card active">
+                    <div class="review-header">
+                        <img src="static/images/reviews/review-1.jpg" alt="Reviewer" class="reviewer-img">
+                        <div>
+                            <h3>Matt Callum</h3>
+                            <div class="stars">
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Dimsum is the best! Enjoy authentic Asian flavors made with love and served fresh every time. 
+                        The food is always delicious, the service is excellent, and delivery is fast. A must-try for every Asian cuisine lover!</p>
+                    <div class="review-nav">
+                        <button class="nav-btn" id="prevBtn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                        <button class="nav-btn" id="nextBtn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="static/images/reviews/review-2.jpg" alt="Reviewer" class="reviewer-img">
+                        <div>
+                            <h3>Sophia Anderson</h3>
+                            <div class="stars">
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Fresh ingredients, flavorful dim sum delivered warm and fast — a true delight for every craving! 
+                        Experience the taste of authentic Asian goodness in every bite.</p>
+                    <div class="review-nav">
+                        <button class="nav-btn prev-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                        <button class="nav-btn next-btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="static/images/reviews/review-3.jpg" alt="Reviewer" class="reviewer-img">
+                        <div>
+                            <h3>Amelia Moore</h3>
+                            <div class="stars">
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                                <ion-icon name="star"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Delicious dim sum with bold, authentic flavors! Always fresh, fast, and satisfying — highly recommended!</p>
+                    <div class="review-nav">
+                        <button class="nav-btn prev-btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+                        <button class="nav-btn next-btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--- Our Subscribe -->
+    <section class="subscribe">
+        <div class="subscribe-content">
+            <h4>OUR SUBSCRIBE</h4>
+            <h2>Subscribe To Our Newsletter</h2>
+            <p>We recommend you to subscribe to our newsletter. Drop your email below to get daily updates about us.</p>
+
+            <form class="subscribe-form">
+                <input type="email" placeholder="Enter your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!--- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand">
+                <h2>Dimsum<span>.</span></h2>
+                <p>We will fill your tummy with delicious food with fast delivery.</p>
+                <div class="footer-socials">
+                    <a href="https://facebook.com/"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="https://instagram.com/"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a href="https://twitter.com/"><ion-icon name="logo-twitter"></ion-icon></a>
+                    <a href="https://google.com/"><ion-icon name="logo-google"></ion-icon></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Our Menu</h3>
+                <ul>
+                    <li><a href="index.html#special">Special</a></li>
+                    <li><a href="index.html#popular">Popular</a></li>
+                    <li><a href="templates/menu.html#menu">Category</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="index.html#services">Why Dimsum</a></li>
+                    <li><a href="templates/footer.html#partner">Partner With Us</a></li>
+                    <li><a href="templates/footer.html#about">About Us</a></li>
+                    <li><a href="templates/footer.html#faq">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="templates/login.html">Account</a></li>
+                    <li><a href="templates/footer.html#contact">Support Center</a></li>
+                    <li><a href="index.html#reviews">Feedback</a></li>
+                    <li><a href="templates/contact.html#contact">Contacts</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Dimsum. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="static/js/script.js"></script>
+</body>
+</html>
