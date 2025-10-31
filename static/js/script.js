@@ -781,6 +781,40 @@ function showOrderItemsCustomer(orderId) {
 
     html += `
             </div>
+    `;
+
+    // Compute amounts (use saved values when available, otherwise derive)
+    const subtotal = (typeof order.subtotal === 'number') ? order.subtotal : (() => {
+        let s = 0;
+        (items || []).forEach(it => {
+            const price = parseFloat(String(it.price || it.unitPrice || '0').replace(/[^0-9.-]+/g, '')) || 0;
+            const qty = it.quantity || 1;
+            s += price * qty;
+        });
+        return parseFloat(s.toFixed(2));
+    })();
+    const shippingFee = (typeof order.shippingFee === 'number') ? order.shippingFee : getShippingFee();
+    const total = (typeof order.total === 'number') ? order.total : parseFloat((subtotal + shippingFee).toFixed(2));
+
+    // Summary block: Subtotal, Shipping Fee, Total
+    html += `
+            <div style="margin-top:16px; padding:14px; border-top:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); border-radius: 10px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <div style="color:rgba(255,255,255,0.8)">Subtotal</div>
+                    <div style="color:#f8af1e; font-weight:700">₱${subtotal.toFixed(2)}</div>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                    <div style="color:rgba(255,255,255,0.8)">Shipping Fee</div>
+                    <div style="color:#f8af1e; font-weight:700">₱${shippingFee.toFixed(2)}</div>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.04);">
+                    <div style="color:white; font-weight:700">Total</div>
+                    <div style="color:#f8af1e; font-weight:900; font-size:1.1rem">₱${total.toFixed(2)}</div>
+                </div>
+            </div>
+    `;
+
+    html += `
             <div style="display:flex; gap:10px; margin-top:12px;">
                 <button onclick="closeOrderItemsModalCustomer()" style="background:#f8af1e; color:#000; border:none; padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Close</button>
             </div>
