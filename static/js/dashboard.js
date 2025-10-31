@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Initialize dashboard
+    // Normalize any legacy orders so payment fields display correctly in admin/staff views
+    normalizeOrdersForDashboard();
     loadDashboardStats();
     loadRecentOrders();
     
@@ -173,6 +175,96 @@ function loadDashboardStats() {
     document.getElementById('totalUsers').textContent = users.length;
 }
 
+// Backfill/migrate orders for admin/staff dashboard to ensure payment fields are present
+function normalizeOrdersForDashboard() {
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    if (!orders.length) return;
+
+    let changed = false;
+    // Use the robust resolver to backfill and normalize orders for dashboard display
+    orders = orders.map(o => {
+        const updated = { ...o };
+        try {
+            const resolved = resolvePaymentLabel(updated);
+            if (resolved && resolved !== 'Unknown') {
+                if (updated.paymentMethodName !== resolved) { updated.paymentMethodName = resolved; changed = true; }
+                if (!updated.paymentMethod || updated.paymentMethod !== resolved) { updated.paymentMethod = resolved; changed = true; }
+                const nameToId = { 'GCash': 'gcash', 'Maya': 'maya', 'PayPal': 'paypal' };
+                const id = nameToId[resolved] || (typeof updated.paymentMethodId === 'string' ? updated.paymentMethodId : null);
+                if (id && updated.paymentMethodId !== id) { updated.paymentMethodId = id; changed = true; }
+            } else if (updated.paymentMethodId && typeof updated.paymentMethodId === 'object') {
+                // Try to extract id/name from object-shaped paymentMethodId
+                const maybe = updated.paymentMethodId.id || updated.paymentMethodId.name;
+                if (maybe) {
+                    const fix = resolvePaymentLabel({ paymentMethodId: maybe, paymentMethodName: updated.paymentMethodName, paymentMethod: updated.paymentMethod });
+                    if (fix && fix !== 'Unknown') {
+                        updated.paymentMethodName = fix;
+                        updated.paymentMethod = fix;
+                        const nameToId = { 'GCash': 'gcash', 'Maya': 'maya', 'PayPal': 'paypal' };
+                        updated.paymentMethodId = nameToId[fix] || String(maybe);
+                        changed = true;
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('normalizeOrdersForDashboard error for order', updated.id, e);
+        }
+        return updated;
+    });
+
+    if (changed) {
+        localStorage.setItem('orders', JSON.stringify(orders));
+    }
+}
+
+
+// Resolve payment method label robustly for display (admin/staff helper)
+function resolvePaymentLabel(order) {
+    // Always try to return one of the canonical display names when possible:
+    // 'GCash', 'Maya', 'PayPal'. Accepts strings, objects, different casings
+    // and infers from substrings.
+    if (!order) return 'Unknown';
+
+    const asString = (val) => {
+        if (val === null || val === undefined) return '';
+        if (typeof val === 'string') return val;
+        if (typeof val === 'number' || typeof val === 'boolean') return String(val);
+        try {
+            if (typeof val === 'object') {
+                if (val.provider) return String(val.provider);
+                if (val.name) return String(val.name);
+                if (val.type) return String(val.type);
+                if (val.id) return String(val.id);
+                return JSON.stringify(val);
+            }
+        } catch (e) { return ''; }
+        return '';
+    };
+
+    const candidates = [
+        asString(order.paymentMethodName),
+        asString(order.paymentMethod),
+        asString(order.paymentMethodId),
+        asString(order.payment),
+        asString(order.payment && order.payment.provider),
+        asString(order.payment && order.payment.name)
+    ].join(' ').toLowerCase();
+
+    const norm = candidates.replace(/[^a-z0-9]/g, '');
+    if (norm.includes('gcash')) return 'GCash';
+    if (norm.includes('paymaya') || norm.includes('maya')) return 'Maya';
+    if (norm.includes('paypal')) return 'PayPal';
+
+    // Final direct checks (in case a friendly name exists but didn't include tokens)
+    const direct = (asString(order.paymentMethodName) || asString(order.paymentMethod) || asString(order.paymentMethodId) || '').trim().toLowerCase();
+    if (direct === 'gcash') return 'GCash';
+    if (direct === 'maya' || direct === 'paymaya') return 'Maya';
+    if (direct === 'paypal') return 'PayPal';
+
+    return 'Unknown';
+}
+
+
 function loadRecentOrders() {
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
     const recentOrders = orders.slice(-5).reverse();
@@ -194,9 +286,8 @@ function loadRecentOrders() {
     ordersList.innerHTML = recentOrders.map(order => {
         const orderDate = new Date(order.date);
         const statusColor = getStatusColor(order.status);
-        // Try to get the correct payment method name
-        let paymentMethod = order.paymentMethodName || order.paymentMethod || (order.paymentMethodId ? methodMap[order.paymentMethodId] : null);
-        if (!paymentMethod) paymentMethod = 'Unknown';
+    // Resolve payment method name using helper
+    let paymentMethod = resolvePaymentLabel(order);
         return `
             <div class="order-card">
                 <div class="order-header">
@@ -210,7 +301,7 @@ function loadRecentOrders() {
                 </div>
                 <div class="order-details">
                     <p><ion-icon name="location-outline"></ion-icon> ${order.address.city}, ${order.address.state}</p>
-                    <p><ion-icon name="card-outline"></ion-icon> Payment Method: ${paymentMethod}</p>
+                    <p><ion-icon name="card-outline"></ion-icon> ${paymentMethod}</p>
                     <p><strong style="color: #f8af1e;">Total: ₱${order.total.toFixed(2)}</strong></p>
                 </div>
             </div>
@@ -282,6 +373,20 @@ function filterOrders(status) {
                             <option value="Shipping" ${order.status === 'Shipping' ? 'selected' : ''}>Shipping</option>
                             <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
                         </select>
+                        <button onclick="showOrderItems(${order.id})" class="action-btn" style="
+                            padding: 8px 12px;
+                            border-radius: 8px;
+                            border: 1px solid rgba(99, 102, 241, 0.15);
+                            background: rgba(99, 102, 241, 0.08);
+                            color: #6366f1;
+                            font-weight: 600;
+                            cursor: pointer;
+                            outline: none;
+                            margin-left: 8px;
+                        ">
+                            <ion-icon name="eye-outline" style="vertical-align: middle;"></ion-icon>
+                            View Items
+                        </button>
                         ${isAdmin ? `
                         <button onclick="deleteOrder(${order.id})" class="action-btn" style="
                             padding: 8px 12px;
@@ -305,7 +410,7 @@ function filterOrders(status) {
                         <p><ion-icon name="person-outline"></ion-icon> ${order.address.name}</p>
                         <p><ion-icon name="location-outline"></ion-icon> ${order.address.address}, ${order.address.city}, ${order.address.state} ${order.address.zipCode}</p>
                         <p><ion-icon name="call-outline"></ion-icon> ${order.address.phone}</p>
-                        <p><ion-icon name="card-outline"></ion-icon> ${order.paymentMethod}</p>
+                        <p><ion-icon name="card-outline"></ion-icon> ${resolvePaymentLabel(order)}</p>
                     </div>
                     <div class="order-total">
                         <h3 style="color: #f8af1e; font-size: 1.5rem;">₱${order.total.toFixed(2)}</h3>
@@ -923,3 +1028,70 @@ function closeStaffModal() {
     const modal = document.getElementById('staffModal');
     if (modal) modal.remove();
 }
+
+// Show a modal listing ordered items for a given order id
+function showOrderItems(orderId) {
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const order = orders.find(o => o.id === orderId);
+    if (!order) {
+        showAlert('error', 'Order not found.');
+        return;
+    }
+
+    const items = order.items || order.cart || [];
+
+    let html = `
+        <div class="shipping-address-form" style="color: white; backdrop-filter: blur(20px); max-height: 90vh; display: flex; flex-direction: column;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #f8af1e;">
+                <h2 style="color:#f8af1e; margin:0; font-size:1.5rem; display:flex; align-items:center; gap:10px;"><ion-icon name="cube-outline" style="font-size:1.6rem"></ion-icon> Ordered Items</h2>
+                <button onclick="closeOrderItemsModal()" style="background:transparent; border:none; color:#f8af1e; font-size:1.6rem; cursor:pointer;"><ion-icon name="close-outline"></ion-icon></button>
+            </div>
+            <div style="flex:1; overflow-y:auto;">
+    `;
+
+    if (!items || items.length === 0) {
+        html += `
+            <div style="text-align:center; padding:40px; color: rgba(255,255,255,0.7);">
+                <ion-icon name="help-circle-outline" style="font-size:3rem; margin-bottom:10px;"></ion-icon>
+                <p>No item details saved for this order.</p>
+            </div>
+        `;
+    } else {
+        html += `<div style="display:flex; flex-direction:column; gap:12px;">`;
+        items.forEach(it => {
+            const price = parseFloat(String(it.price || it.unitPrice || '0').replace(/[^0-9.-]+/g, '')) || 0;
+            const qty = it.quantity || 1;
+            const itemTotal = (price * qty).toFixed(2);
+            html += `
+                <div style="background: rgba(255,255,255,0.03); padding:12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; gap:12px; align-items:center; min-width:0;">
+                        <img src="${it.image || '../static/images/placeholder.jpg'}" alt="${it.name}" style="width:56px; height:56px; object-fit:cover; border-radius:8px;">
+                        <div style="min-width:0;">
+                            <div style="font-weight:700; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${it.name}</div>
+                            <div style="color:rgba(255,255,255,0.65); font-size:0.9rem;">₱${(price).toFixed(2)} &times; ${qty}</div>
+                        </div>
+                    </div>
+                    <div style="font-weight:700; color:#f8af1e;">₱${itemTotal}</div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    }
+
+    html += `
+            </div>
+            <div style="display:flex; gap:10px; margin-top:12px;">
+                <button onclick="closeOrderItemsModal()" style="background:#f8af1e; color:#000; border:none; padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Close</button>
+            </div>
+        </div>
+    `;
+
+    const modal = document.createElement('div');
+    modal.id = 'orderItemsModal';
+    modal.style.cssText = `position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.92); z-index:10000; display:flex; align-items:center; justify-content:center; overflow-y:auto; padding:20px 0;`;
+    modal.innerHTML = html;
+    modal.addEventListener('click', function(e) { if (e.target === modal) closeOrderItemsModal(); });
+    document.body.appendChild(modal);
+}
+
+function closeOrderItemsModal() { const m = document.getElementById('orderItemsModal'); if (m) m.remove(); }
