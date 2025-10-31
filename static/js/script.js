@@ -633,11 +633,10 @@ function showOrderStatus() {
             const orderDate = new Date(order.date);
             const statusColor = order.status === 'Delivered' ? '#22c55e' : 
                                order.status === 'Shipping' ? '#3b82f6' : '#f8af1e';
-            // Determine payment method display
-            const methodMap = { gcash: 'GCash', maya: 'Maya', paypal: 'PayPal' };
+            // Determine payment method display (use helper)
             const methodIconMap = { gcash: 'wallet-outline', maya: 'phone-portrait-outline', paypal: 'logo-paypal' };
             const methodId = order.paymentMethodId || null;
-            const methodLabel = order.paymentMethodName || order.paymentMethod || (methodId ? (methodMap[methodId] || 'Unknown') : 'Unknown');
+            const methodLabel = resolvePaymentLabel(order);
             const methodIcon = methodIconMap[methodId] || 'card-outline';
             
             orderHTML += `
@@ -682,7 +681,10 @@ function showOrderStatus() {
                     </div>
                     ${order.status === 'Delivered' ? `<div style="display:flex; gap:10px; margin-top:12px;">
                         <button onclick="confirmReceived(${order.id})" style="background:#22c55e;color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;">Confirm Received</button>
-                    </div>` : ''}
+                        <button onclick="showOrderItemsCustomer(${order.id})" style="background:transparent;color:#f8af1e;border:1px solid #f8af1e;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;">View Items</button>
+                    </div>` : `<div style="display:flex; gap:10px; margin-top:12px;">
+                        <button onclick="showOrderItemsCustomer(${order.id})" style="background:transparent;color:#f8af1e;border:1px solid #f8af1e;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;">View Items</button>
+                    </div>`}
                 </div>
             `;
         });
@@ -727,6 +729,73 @@ function closeOrderStatusModal() {
         modal.remove();
     }
 }
+
+// Customer: show ordered items for a specific order
+function showOrderItemsCustomer(orderId) {
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const order = orders.find(o => o.id === orderId);
+    if (!order) {
+        showAlert('error', 'Order not found.');
+        return;
+    }
+
+    const items = order.items || order.cart || [];
+
+    let html = `
+        <div class="shipping-address-form" style="color: white; backdrop-filter: blur(20px); max-height: 90vh; display: flex; flex-direction: column;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #f8af1e;">
+                <h2 style="color:#f8af1e; margin:0; font-size:1.5rem; display:flex; align-items:center; gap:10px;"><ion-icon name="cube-outline" style="font-size:1.6rem"></ion-icon> Ordered Items</h2>
+                <button onclick="closeOrderItemsModalCustomer()" style="background:transparent; border:none; color:#f8af1e; font-size:1.6rem; cursor:pointer;"><ion-icon name="close-outline"></ion-icon></button>
+            </div>
+            <div style="flex:1; overflow-y:auto;">
+    `;
+
+    if (!items || items.length === 0) {
+        html += `
+            <div style="text-align:center; padding:40px; color: rgba(255,255,255,0.7);">
+                <ion-icon name="help-circle-outline" style="font-size:3rem; margin-bottom:10px;"></ion-icon>
+                <p>No item details saved for this order.</p>
+            </div>
+        `;
+    } else {
+        html += `<div style="display:flex; flex-direction:column; gap:12px;">`;
+        items.forEach(it => {
+            const price = parseFloat(String(it.price || it.unitPrice || '0').replace(/[^0-9.-]+/g, '')) || 0;
+            const qty = it.quantity || 1;
+            const itemTotal = (price * qty).toFixed(2);
+            html += `
+                <div style="background: rgba(255,255,255,0.03); padding:12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; gap:12px; align-items:center; min-width:0;">
+                        <img src="${it.image || '../static/images/placeholder.jpg'}" alt="${it.name}" style="width:56px; height:56px; object-fit:cover; border-radius:8px;">
+                        <div style="min-width:0;">
+                            <div style="font-weight:700; color:white; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${it.name}</div>
+                            <div style="color:rgba(255,255,255,0.65); font-size:0.9rem;">₱${(price).toFixed(2)} &times; ${qty}</div>
+                        </div>
+                    </div>
+                    <div style="font-weight:700; color:#f8af1e;">₱${itemTotal}</div>
+                </div>
+            `;
+        });
+        html += `</div>`;
+    }
+
+    html += `
+            </div>
+            <div style="display:flex; gap:10px; margin-top:12px;">
+                <button onclick="closeOrderItemsModalCustomer()" style="background:#f8af1e; color:#000; border:none; padding:10px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Close</button>
+            </div>
+        </div>
+    `;
+
+    const modal = document.createElement('div');
+    modal.id = 'orderItemsModalCustomer';
+    modal.style.cssText = `position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.92); z-index:10000; display:flex; align-items:center; justify-content:center; overflow-y:auto; padding:20px 0;`;
+    modal.innerHTML = html;
+    modal.addEventListener('click', function(e) { if (e.target === modal) closeOrderItemsModalCustomer(); });
+    document.body.appendChild(modal);
+}
+
+function closeOrderItemsModalCustomer() { const m = document.getElementById('orderItemsModalCustomer'); if (m) m.remove(); }
 
 // Handle Logout
 function handleLogout() {
@@ -1528,6 +1597,11 @@ function completeCheckout(address, total) {
     showPaymentOptions(address, total);
 }
 
+// Shipping fee helper (fixed)
+function getShippingFee() {
+    return 30.00; 
+}
+
 function showPaymentOptions(address, total) {
     const paymentMethods = [
         { id: 'gcash', name: 'GCash', icon: 'wallet-outline' },
@@ -1571,15 +1645,21 @@ function showPaymentOptions(address, total) {
             <div style="flex: 1; overflow-y: auto; padding-right: 8px; margin-right: -8px;">
                 <div style="margin-bottom: 24px;">
                     <div style="background: rgba(248, 175, 30, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(248, 175, 30, 0.3);">
-                        <h3 style="color: #f8af1e; margin: 0 0 10px 0; font-size: 1.3rem;">Order Summary</h3>
-                        <p style="color: white; margin: 5px 0; font-size: 1.1rem;">
-                            <strong>Total Amount:</strong> <span style="color: #f8af1e; font-size: 1.5rem; font-weight: 700;">₱${total.toFixed(2)}</span>
-                        </p>
-                        <p style="color: rgba(255,255,255,0.7); margin: 5px 0; font-size: 0.9rem;">
-                            <ion-icon name="location-outline" style="vertical-align: middle;"></ion-icon>
-                            Shipping to: ${address.address}, ${address.city}, ${address.state}
-                        </p>
-                    </div>
+                            <h3 style="color: #f8af1e; margin: 0 0 10px 0; font-size: 1.3rem;">Order Summary</h3>
+                            <p style="color: white; margin: 5px 0; font-size: 1.1rem;">
+                                <strong>Subtotal:</strong> <span style="color: #f8af1e; font-size: 1.2rem; font-weight: 700;">₱${total.toFixed(2)}</span>
+                            </p>
+                            <p style="color: white; margin: 5px 0; font-size: 1.1rem;">
+                                <strong>Shipping Fee:</strong> <span style="color: #f8af1e; font-size: 1.2rem; font-weight: 700;">₱${getShippingFee().toFixed(2)}</span>
+                            </p>
+                            <p style="color: white; margin: 8px 0 5px 0; font-size: 1.15rem;">
+                                <strong>Total Amount:</strong> <span style="color: #f8af1e; font-size: 1.5rem; font-weight: 700;">₱${(total + getShippingFee()).toFixed(2)}</span>
+                            </p>
+                            <p style="color: rgba(255,255,255,0.7); margin: 5px 0; font-size: 0.9rem;">
+                                <ion-icon name="location-outline" style="vertical-align: middle;"></ion-icon>
+                                Shipping to: ${address.address}, ${address.city}, ${address.state}
+                            </p>
+                        </div>
                 </div>
                 
                 <div style="margin-bottom: 20px;">
@@ -1758,28 +1838,41 @@ function confirmPayment(total, address) {
     
     // Process payment
     closePaymentForm();
-    
-    // Clear cart
-    localStorage.setItem('cart', JSON.stringify([]));
-    updateCartBadge();
-    
+
+    // Capture cart items before clearing so we can persist them on the order
+    const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
     // Save order to localStorage
     let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    const shippingFee = getShippingFee();
+    const finalTotal = parseFloat((total + shippingFee).toFixed(2));
+
     orders.push({
         id: Date.now(),
         date: new Date().toISOString(),
-        total: total,
+        // store total including shipping so all views reflect amount charged
+        total: finalTotal,
+        subtotal: parseFloat(total.toFixed(2)),
+        shippingFee: shippingFee,
         address: address,
         // Save both ID and display name for robustness
         paymentMethodId: selectedPaymentMethod,
         paymentMethodName: selectedPaymentName,
         // Keep legacy field for backward compatibility in any other views
         paymentMethod: selectedPaymentName,
-        status: 'Processing'
+        status: 'Processing',
+        // Persist the ordered items so admin/staff can review them
+        items: cartItems
     });
     localStorage.setItem('orders', JSON.stringify(orders));
+
+    // Clear cart after saving the order
+    localStorage.setItem('cart', JSON.stringify([]));
+    updateCartBadge();
     
-    showAlert('success', `Payment successful via ${selectedPaymentName}! Total: ₱${total.toFixed(2)} - Order is being processed.`);
+    // Use resolved friendly name to avoid 'via null' or raw ids
+    const displayPayment = resolvePaymentLabel({ paymentMethodName: selectedPaymentName, paymentMethod: selectedPaymentName, paymentMethodId: selectedPaymentMethod }) || selectedPaymentName || 'selected payment method';
+    showAlert('success', `Payment successful via ${displayPayment}! Subtotal: ₱${total.toFixed(2)}, Shipping: ₱${shippingFee.toFixed(2)}, Total: ₱${finalTotal.toFixed(2)} - Order is being processed.`);
     
     // Reset selected payment
     selectedPaymentMethod = null;
@@ -2111,34 +2204,46 @@ function normalizeExistingOrders() {
     if (!orders.length) return;
 
     let changed = false;
-    const mapNameToId = (name) => {
-        const n = (name || '').toLowerCase();
-        if (n.includes('gcash')) return { id: 'gcash', name: 'GCash' };
-        if (n.includes('maya')) return { id: 'maya', name: 'Maya' };
-        if (n.includes('paypal')) return { id: 'paypal', name: 'PayPal' };
-        return null;
-    };
-
+    // Use the robust resolver to fill missing fields where possible
     orders = orders.map(o => {
         const updated = { ...o };
-        // If legacy field exists but new ones are missing, copy it
-        if (!updated.paymentMethodName && updated.paymentMethod) {
-            updated.paymentMethodName = updated.paymentMethod;
-            changed = true;
-        }
-        // If id is missing, try to infer from the name string
-        if (!updated.paymentMethodId) {
-            const inferred = mapNameToId(updated.paymentMethodName || updated.paymentMethod || '');
-            if (inferred) {
-                updated.paymentMethodId = inferred.id;
-                updated.paymentMethodName = inferred.name; // normalize casing
-                changed = true;
+        try {
+            const resolved = resolvePaymentLabel(updated);
+            if (resolved && resolved !== 'Unknown') {
+                // If a friendly name can be resolved, ensure both name and legacy field exist
+                if (updated.paymentMethodName !== resolved) {
+                    updated.paymentMethodName = resolved;
+                    changed = true;
+                }
+                if (!updated.paymentMethod || updated.paymentMethod !== resolved) {
+                    updated.paymentMethod = resolved;
+                    changed = true;
+                }
+                // Map friendly name back to canonical id
+                const nameToId = { 'GCash': 'gcash', 'Maya': 'maya', 'PayPal': 'paypal' };
+                const id = nameToId[resolved] || (typeof updated.paymentMethodId === 'string' ? updated.paymentMethodId : null);
+                if (id && updated.paymentMethodId !== id) {
+                    updated.paymentMethodId = id;
+                    changed = true;
+                }
+            } else {
+                // Try additional heuristics: if paymentMethodId is an object, extract id/name
+                if (updated.paymentMethodId && typeof updated.paymentMethodId === 'object') {
+                    const maybeId = updated.paymentMethodId.id || updated.paymentMethodId.name;
+                    if (maybeId) {
+                        const fix = resolvePaymentLabel({ paymentMethodId: maybeId, paymentMethodName: updated.paymentMethodName, paymentMethod: updated.paymentMethod });
+                        if (fix && fix !== 'Unknown') {
+                            updated.paymentMethodName = fix;
+                            updated.paymentMethod = fix;
+                            const nameToId = { 'GCash': 'gcash', 'Maya': 'maya', 'PayPal': 'paypal' };
+                            updated.paymentMethodId = nameToId[fix] || String(maybeId);
+                            changed = true;
+                        }
+                    }
+                }
             }
-        }
-        // Ensure legacy field mirrors normalized display name so all views show it
-        if (!updated.paymentMethod && updated.paymentMethodName) {
-            updated.paymentMethod = updated.paymentMethodName;
-            changed = true;
+        } catch (e) {
+            console.warn('normalizeExistingOrders: error while normalizing order', updated.id, e);
         }
         return updated;
     });
@@ -2146,6 +2251,49 @@ function normalizeExistingOrders() {
     if (changed) {
         localStorage.setItem('orders', JSON.stringify(orders));
     }
+}
+
+// Resolve payment method label robustly for display (customer-side helper)
+function resolvePaymentLabel(order) {
+    // Always try to infer one of the canonical names: 'GCash', 'Maya', 'PayPal'.
+    if (!order) return 'Unknown';
+
+    const asString = (val) => {
+        if (val === null || val === undefined) return '';
+        if (typeof val === 'string') return val;
+        if (typeof val === 'number' || typeof val === 'boolean') return String(val);
+        try {
+            if (typeof val === 'object') {
+                if (val.provider) return String(val.provider);
+                if (val.name) return String(val.name);
+                if (val.type) return String(val.type);
+                if (val.id) return String(val.id);
+                return JSON.stringify(val);
+            }
+        } catch (e) { return ''; }
+        return '';
+    };
+
+    const candidates = [
+        asString(order.paymentMethodName),
+        asString(order.paymentMethod),
+        asString(order.paymentMethodId),
+        asString(order.payment),
+        asString(order.payment && order.payment.provider),
+        asString(order.payment && order.payment.name)
+    ].join(' ').toLowerCase();
+
+    const norm = candidates.replace(/[^a-z0-9]/g, '');
+    if (norm.includes('gcash')) return 'GCash';
+    if (norm.includes('paymaya') || norm.includes('maya')) return 'Maya';
+    if (norm.includes('paypal')) return 'PayPal';
+
+    const direct = (asString(order.paymentMethodName) || asString(order.paymentMethod) || asString(order.paymentMethodId) || '').trim().toLowerCase();
+    if (direct === 'gcash') return 'GCash';
+    if (direct === 'maya' || direct === 'paymaya') return 'Maya';
+    if (direct === 'paypal') return 'PayPal';
+
+    return 'Unknown';
 }
 
 // Confirm received: move order from 'orders' into 'purchaseHistory'
