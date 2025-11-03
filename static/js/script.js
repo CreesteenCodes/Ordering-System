@@ -1870,6 +1870,10 @@ function confirmPayment(total, address) {
         return;
     }
     
+    // Capture selected payment before closing the modal (closePaymentForm resets the globals)
+    const paymentMethodIdToSave = selectedPaymentMethod;
+    const paymentMethodNameToSave = selectedPaymentName;
+
     // Process payment
     closePaymentForm();
 
@@ -1889,11 +1893,11 @@ function confirmPayment(total, address) {
         subtotal: parseFloat(total.toFixed(2)),
         shippingFee: shippingFee,
         address: address,
-        // Save both ID and display name for robustness
-        paymentMethodId: selectedPaymentMethod,
-        paymentMethodName: selectedPaymentName,
-        // Keep legacy field for backward compatibility in any other views
-        paymentMethod: selectedPaymentName,
+    // Save both ID and display name for robustness
+    paymentMethodId: paymentMethodIdToSave,
+    paymentMethodName: paymentMethodNameToSave,
+    // Keep legacy field for backward compatibility in any other views
+    paymentMethod: paymentMethodNameToSave,
         status: 'Processing',
         // Persist the ordered items so admin/staff can review them
         items: cartItems
@@ -1905,7 +1909,7 @@ function confirmPayment(total, address) {
     updateCartBadge();
     
     // Use resolved friendly name to avoid 'via null' or raw ids
-    const displayPayment = resolvePaymentLabel({ paymentMethodName: selectedPaymentName, paymentMethod: selectedPaymentName, paymentMethodId: selectedPaymentMethod }) || selectedPaymentName || 'selected payment method';
+    const displayPayment = resolvePaymentLabel({ paymentMethodName: paymentMethodNameToSave, paymentMethod: paymentMethodNameToSave, paymentMethodId: paymentMethodIdToSave }) || paymentMethodNameToSave || 'selected payment method';
     showAlert('success', `Payment successful via ${displayPayment}! Subtotal: ₱${total.toFixed(2)}, Shipping: ₱${shippingFee.toFixed(2)}, Total: ₱${finalTotal.toFixed(2)} - Order is being processed.`);
     
     // Reset selected payment
