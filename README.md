@@ -35,6 +35,7 @@ Before using the system, you need to connect your project to Firebase Realtime D
   - Copy the generated Firebase configuration.
 3. Add Your Firebase Config to the Project
 Open your JavaScript file (e.g., firebase.js or app.js) and paste your config:
+  ```bash
   const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -44,6 +45,7 @@ Open your JavaScript file (e.g., firebase.js or app.js) and paste your config:
       messagingSenderId: "YOUR_SENDER_ID",
       appId: "YOUR_APP_ID"
   };
+  ```
 4. Initialize Firebase in Your Project
 Make sure to include Firebase scripts before your custom JS file, or install via npm if using modules.
 5. Test Connection
