@@ -1701,6 +1701,24 @@ nav {
 .order-card:hover {
     border-color: rgba(248, 175, 30, 0.3);
 }
+/* Scoped: make order-management status and action buttons taller (only for detailed cards) */
+.order-card.detailed .status-select {
+    padding: 8px 44px 8px 10px; /* slightly smaller vertical padding while keeping room for caret */
+    height: 40px; /* reduced height */
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.order-card.detailed .action-btn {
+    padding: 8px 12px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.95rem;
+    border-radius: 8px;
+}
 .order-header {
     display: flex;
     justify-content: space-between;
@@ -1868,6 +1886,13 @@ nav {
 }
 .action-btn ion-icon {
     font-size: 1.1rem;
+}
+
+/* Cancelled badge styling */
+.cancelled-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 /* User Management */
@@ -2154,6 +2179,11 @@ nav {
     .order-card.detailed .action-btn {
         width: 100%;
     }
+    /* Center the cancelled badge on small screens */
+    .order-card.detailed .cancelled-badge {
+        justify-content: center;
+        width: 100%;
+    }
     .order-total {
         text-align: left;
         width: 100%;
@@ -2236,6 +2266,37 @@ nav {
     }
     .logo img {
         height: 35px;
+    }
+    
+    /* Mobile: stack order-card detailed layout for admin/staff orders */
+    .order-card.detailed .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .order-card.detailed .order-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .order-card.detailed .order-actions {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 0.75rem;
+        gap: 0.5rem;
+    }
+    .order-card.detailed .status-select,
+    .order-card.detailed .action-btn {
+        width: 100%;
+        box-sizing: border-box;
+        padding-right: 48px; /* leave room for caret SVG if present */
+    }
+    .order-card.detailed .order-total h3 {
+        font-size: 1.5rem;
+    }
+    .order-card.detailed .order-info p {
+        margin: 6px 0;
+        word-break: break-word;
     }
 }
 
@@ -2378,4 +2439,5 @@ nav {
     .dashboard-section {
         padding: 1rem 3%;
     }
+
 }
