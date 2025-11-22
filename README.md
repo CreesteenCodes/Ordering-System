@@ -50,4 +50,5 @@ Open your JavaScript file (e.g., firebase.js or app.js) and paste your config:
 4. **Initialize Firebase in Your Project**
    
 Make sure to include Firebase scripts before your custom JS file, or install via npm if using modules.
+
 5. **Test Connection**
