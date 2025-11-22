@@ -24,16 +24,17 @@ The **Newsletter Subscription** feature is currently **not functional**. To make
 # 🔧 Configuring Firebase Realtime Database
 Before using the system, you need to connect your project to Firebase Realtime Database. Follow the steps below to set up your Firebase configuration.
 
-1. Create a Firebase Project
+1. **Create a Firebase Project**
   - Go to `Firebase Console`.
   - Click `Add Project` → enter your project name.
   - Disable Google Analytics (optional) → `Create Project`.  
-2. Add a Web App
+2. **Add a Web App**
   - Inside your Firebase project, click </> `Web App`.
   - Enter an app nickname (e.g., dimsum-ordering).
   - Click `Register App`.
   - Copy the generated Firebase configuration.
-3. Add Your Firebase Config to the Project
+3. **Add Your Firebase Config to the Project**
+    
 Open your JavaScript file (e.g., firebase.js or app.js) and paste your config:
   ```bash
   const firebaseConfig = {
@@ -46,6 +47,7 @@ Open your JavaScript file (e.g., firebase.js or app.js) and paste your config:
       appId: "YOUR_APP_ID"
   };
   ```
-4. Initialize Firebase in Your Project
+4. **Initialize Firebase in Your Project**
+   
 Make sure to include Firebase scripts before your custom JS file, or install via npm if using modules.
-5. Test Connection
+5. **Test Connection**
