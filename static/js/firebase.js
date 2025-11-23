@@ -6,14 +6,14 @@
 
 (function() {
     const firebaseConfig = {
-        apiKey: "",
-        authDomain: "dimsum-by-luna.firebaseapp.com",
-        databaseURL: "https://dimsum-by-luna-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "dimsum-by-luna",
-        storageBucket: "dimsum-by-luna.firebasestorage.app",
-        messagingSenderId: "368208118920",
-        appId: "1:368208118920:web:4cb09a2ab10a8242a68b3d",
-        measurementId: "G-X8S5K23KX6"
+        apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+        authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+        databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+        projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+        storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+        appId: import.meta.env.VITE_FIREBASE_APP_ID,
+        measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
     };
 
     // Create a small module script so we can use the firebase modular SDK from CDN
@@ -213,4 +213,5 @@
     document.head.appendChild(mod);
 
 })();
+
 
