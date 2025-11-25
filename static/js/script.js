@@ -942,7 +942,7 @@ function showOrderStatus() {
                     ${order.status === 'Delivered' ? `<div style="display:flex; gap:10px; margin-top:12px;">
                         <button onclick="confirmReceived(${order.id})" style="background:#22c55e;color:#000;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;">Confirm Received</button>
                         <button onclick="showOrderItemsCustomer(${order.id})" style="background:transparent;color:#f8af1e;border:1px solid #f8af1e;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;">View Items</button>
-                    </div>` : (order.status === 'Processing' || order.status === 'Shipping') ? `<div style="display:flex; gap:10px; margin-top:12px;">
+                    </div>` : (order.status === 'Processing') ? `<div style="display:flex; gap:10px; margin-top:12px;">
                         <button onclick="showOrderItemsCustomer(${order.id})" style="background:transparent;color:#f8af1e;border:1px solid #f8af1e;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;">View Items</button>
                         <button onclick="cancelOrder(${order.id})" style="background:#ef4444;color:#fff;border:none;padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer;">Cancel Order</button>
                     </div>` : `<div style="display:flex; gap:10px; margin-top:12px;">
@@ -3122,8 +3122,8 @@ function cancelOrder(orderId) {
         return;
     }
 
-    // Only allow cancellation for Processing or Shipping statuses
-    if (!(order.status === 'Processing' || order.status === 'Shipping')) {
+    // Only allow cancellation when the order is still in 'Processing' (preparing) state
+    if (!(order.status === 'Processing')) {
         showAlert('error', 'This order cannot be cancelled.');
         return;
     }
